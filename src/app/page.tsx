@@ -22,6 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { Input } from "@/components/ui/input"
 
 interface RequestDataType {
   body: {
@@ -64,6 +65,7 @@ const requestTypes = [
 ] as const
 
 const FormSchema = z.object({
+  betId: z.string(),
   items: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: "You have to select at least one item.",
   }),
@@ -77,6 +79,7 @@ export default function Home() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      betId: "",
       items: [],
     },
   })
@@ -94,9 +97,15 @@ export default function Home() {
       d.items.map(async (i) => {
         return getRequests(i);
       })
-    );
+    )
 
-    setRequests(requests.flat())
+    let filteredReqs = requests.flat()
+
+    if (d.betId != "") {
+      filteredReqs = filteredReqs.filter(r => r.body.betId == d.betId)
+    }
+
+    setRequests(filteredReqs)
   }
 
   return (
@@ -106,9 +115,21 @@ export default function Home() {
           className="mb-6 p-3 rounded-md border border-gray-200 flex items-center gap-6">
           <FormField
             control={form.control}
+            name="betId"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Search by Bet ID" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="items"
             render={() => (
-              <>
+              <div>
                 <FormItem className="flex">
                   {requestTypes.map((requestType) => (
                     <FormField
@@ -145,7 +166,7 @@ export default function Home() {
                   ))}
                 </FormItem>
                 <FormMessage />
-              </>
+              </div>
             )}
           />
           <Button type="submit">Submit</Button>
