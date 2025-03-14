@@ -108,42 +108,44 @@ export default function Home() {
             control={form.control}
             name="items"
             render={() => (
-              <FormItem className="flex">
-                {requestTypes.map((requestType) => (
-                  <FormField
-                    key={requestType.id}
-                    control={form.control}
-                    name="items"
-                    render={({ field }) => {
-                      return (
-                        <FormItem
-                          key={requestType.id}
-                          className="flex flex-row items-start space-x-3 space-y-0"
-                        >
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value?.includes(requestType.id)}
-                              onCheckedChange={(checked) => {
-                                return checked
-                                  ? field.onChange([...field.value, requestType.id])
-                                  : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== requestType.id
+              <>
+                <FormItem className="flex">
+                  {requestTypes.map((requestType) => (
+                    <FormField
+                      key={requestType.id}
+                      control={form.control}
+                      name="items"
+                      render={({ field }) => {
+                        return (
+                          <FormItem
+                            key={requestType.id}
+                            className="flex flex-row items-start space-x-3 space-y-0"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(requestType.id)}
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...field.value, requestType.id])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== requestType.id
+                                        )
                                       )
-                                    )
-                              }}
-                            />
-                          </FormControl>
-                          <FormLabel className="text-sm font-normal">
-                            {requestType.label}
-                          </FormLabel>
-                        </FormItem>
-                      )
-                    }}
-                  />
-                ))}
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="text-sm font-normal">
+                              {requestType.label}
+                            </FormLabel>
+                          </FormItem>
+                        )
+                      }}
+                    />
+                  ))}
+                </FormItem>
                 <FormMessage />
-              </FormItem>
+              </>
             )}
           />
           <Button type="submit">Submit</Button>
