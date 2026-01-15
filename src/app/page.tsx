@@ -71,7 +71,7 @@ const FormSchema = z.object({
   }),
 })
 
-const baseUrl = "https://external.curiosity.ext.thebetmakers.com/mock-api/v1/wallet"
+const baseUrl = "https://external.nimbus.ext.thebetmakers.com:8443/mock-api/v1/wallet"
 
 export default function Home() {
   const [requests, setRequests] = useState<RequestDataType[]>([])
